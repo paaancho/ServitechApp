@@ -1,0 +1,48 @@
+{
+  "name": "servitechapp",
+  "version": "1.0.1",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "com.servitechapp.cloud",
+    "productName": "ServitechApp Cloud",
+    "copyright": "©2025 ServitechApp Cloud",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/icon.icns"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Mi Aplicación",
+      "installerIcon": "assets/icon.ico",
+      "uninstallerIcon": "assets/uninstall.ico",
+      "installerHeaderIcon": "assets/installer-icon.ico",
+      "allowElevation": true,
+      "displayLanguageSelector": true
+    }
+  },
+  "devDependencies": {
+    "electron": "^34.2.0",
+    "electron-builder": "^25.1.8"
+  },
+  "dependencies": {
+    "electron-prompt": "^1.7.0"
+  }
+}

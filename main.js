@@ -101,10 +101,39 @@ function createWindow(url) {
         mainWindow.loadURL('data:text/html;charset="utf-8",<h2>Por favor, ingresa una URL desde el menú "Cambiar URL"</h2>');
     }
 
+    // Ajustar tamaño después de que la página haya cargado
+    mainWindow.webContents.once('did-finish-load', async () => {
+        const { width, height } = await mainWindow.webContents.executeJavaScript(`
+            (function() {
+                const body = document.body;
+                const html = document.documentElement;
+                return {
+                    width: Math.max(body.scrollWidth, html.scrollWidth, body.offsetWidth, html.offsetWidth, body.clientWidth, html.clientWidth),
+                    height: Math.max(body.scrollHeight, html.scrollHeight, body.offsetHeight, html.offsetHeight, body.clientHeight, html.clientHeight)
+                };
+            })();
+        `);
+    
+        // Agrega un margen de seguridad para evitar barras de desplazamiento
+        const safeWidth = width + 20;  
+        const safeHeight = height + 20;  
+    
+        // Obtiene el tamaño de la pantalla principal
+        const { width: screenWidth, height: screenHeight } = require('electron').screen.getPrimaryDisplay().workAreaSize;
+    
+        // Calcula la posición para centrar la ventana
+        const x = Math.round((screenWidth - safeWidth) / 2);
+        const y = Math.round((screenHeight - safeHeight) / 2);
+    
+        // Ajusta la ventana y la centra
+        mainWindow.setBounds({ x, y, width: safeWidth, height: safeHeight });
+    });
+
     // Bloquea navegación fuera de la URL
     mainWindow.webContents.on('will-navigate', (e) => {
         e.preventDefault();
     });
+    
 
     // Bloquea nuevas ventanas
     mainWindow.webContents.setWindowOpenHandler(() => {
